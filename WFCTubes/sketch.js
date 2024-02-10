@@ -4,7 +4,7 @@
 
 
 const c = 2000; //canvas size
-const s = 20; // tile count per row
+const s = 40; // tile count per row
 let grid;
 let scl = c/s;
 
@@ -21,6 +21,7 @@ const dirs = [
 let start;
 
 function preload(){
+
   images[0]=loadImage("blank.jpg");
   images[1]=loadImage("dir.jpg");
   images[2]=images[1];
@@ -30,6 +31,7 @@ function preload(){
 
 
 function setup() {
+  randomSeed(5);
   for(let image of images) image.resize(0,scl);
   grid=new Array(s);
   //fill grid
@@ -42,11 +44,11 @@ function setup() {
 
 
   createCanvas(c, c);
-  for(let i = 0; i<s; i++){
-    for(let j = 0; j<s; j++){
+  for(let i = 0; i<s; i++)
+    for(let j = 0; j<s; j++)
       grid[i][j].draw();
-    }
-  }
+    
+  
   start=performance.now();
   loop();
 }
@@ -54,7 +56,7 @@ function setup() {
 //function draw() {}
 
 function draw(){
-  // getting smallest entropy tiles - got the sorting idea from TheCodingTrain
+  // getting smallest entropy tiles 
   let gridCopy = [];
   for(let i = 0; i<s; i++)
     for(let j = 0; j<s; j++)
@@ -68,6 +70,7 @@ function draw(){
   });
   if(gridCopy.length===0){//all of them are collapsed
     noLoop(); 
+    save("final-2k.png");
     print("finished - "+(performance.now()-start)/1000+"s");
     return;
   }

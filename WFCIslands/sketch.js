@@ -3,11 +3,10 @@
 // 30 Oct 2023
 
 
-const c = 700; //canvas size
-const s = 7; // tile count per row
-const d = 2; //number of canvases
+const c = 2000; //canvas size
+const s = 10; // tile count per row
 let grid,fullCanvas;
-let scl = c/d/s;
+let scl = c/s;
 
 let images;
 let start,count=0;
@@ -35,13 +34,11 @@ function preload(){
 
 
 function setup() { 
-  fullCanvas=new Array(d);
-  for(let i of fullCanvas)fullCanvas[i]=new Array(d);
 
   for(let row of images) for(let image of row)image.resize(0,scl);
 
   grid=new Array(s);
-  //fill grid
+  //fill grid with uncollapsed tiles
   for(let i = 0; i<s; i++){
     grid[i]=new Array(s);
     for(let j = 0; j<s; j++){
@@ -51,20 +48,19 @@ function setup() {
 
   createCanvas(c, c);
 
-  for(let i = 0; i<s; i++){
-    for(let j = 0; j<s; j++){
+  for(let i = 0; i<s; i++)
+    for(let j = 0; j<s; j++)
       grid[i][j].draw();
-    }
-  }
+    
+  
   start=performance.now();
 }
 
 
 
-//function draw() {}
 
 function draw(){
-  // getting smallest entropy tiles - got the sorting idea from TheCodingTrain
+  // getting smallest entropy tiles 
   let gridCopy = [];
   for(let i = 0; i<s; i++)
     for(let j = 0; j<s; j++)
@@ -77,8 +73,9 @@ function draw(){
     return a.options.length - b.options.length; // if a is smaller than b, it will return a negative value, thus letting the sort know which one comes first
   });
   if(gridCopy.length===0){//all of them are collapsed
-    noLoop();  // next grid
+    noLoop();  
     print("finished - "+(performance.now()-start)/1000+"s");
+    save("finalIslands-2k")
     return;
   }
   
@@ -92,9 +89,7 @@ function draw(){
   print(gridCopy);
 }
 
-// function mousePressed(){
-//   loop();
-// }
+
 
 
 class Tile{
